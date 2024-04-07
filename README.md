@@ -39,7 +39,7 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r ./requirements.txt
 ```
-Olettaen, että [https://github.com/hy-tsoha/local-pg](local-pg) on asennettu, käynnistä se komennolla
+Olettaen, että [local-pg](https://github.com/hy-tsoha/local-pg) on asennettu, käynnistä se komennolla
 ```
 $ start-pg.sh
 ```
