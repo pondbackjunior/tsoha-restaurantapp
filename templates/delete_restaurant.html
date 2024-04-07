@@ -1,0 +1,6 @@
+{% set url_name = res_name|replace(' ', '_') %}
+<p>Haluatko varmasti poistaa ravintolan {{res_name}}?</p>
+<form action="/delete_restaurant/{{url_name}}" method="post">
+    <input type="submit" value="Poista">
+    <input type="button" value="Palaa takaisin" onclick="window.location.href='/restaurant/{{url_name}}'">
+</form>

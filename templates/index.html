@@ -1,3 +1,37 @@
-Tervetuloa!
-<p>
-Olet sivuston {{ counter }}. käyttäjä
+{% if session.user_id %}
+Olet kirjautunut sisään{% if session.user_role == "admin"%} <b>ylläpitäjänä</b>{%endif%}.
+<a href="/logout">Kirjaudu ulos</a>
+{% else %}
+<a href="/login"><big>Kirjaudu sisään</big></a>
+{% endif %}
+{% if session.user_id and session.user_role == "admin"%}
+<hr>
+Ylläpitäjän toiminnot:
+<a href="/create">Luo ravintola</a>
+{% endif %}
+<hr>
+Tervetuloa ravintolasovellukseen.
+<hr>
+<h1>Ravintolat</h1>
+<p>Järjestä:</p>
+<form action="/" method="post">
+    <select name="order_by">
+      <option value="newest" {% if order_by == 'newest' %}selected{% endif %}>Uusin</option>
+      <option value="rating" {% if order_by == 'rating' %}selected{% endif %}>Paras arvosana</option>
+    </select>
+    <input type="submit" value="Järjestä">
+  </form>
+  
+<hr>
+{%if restaurants%}
+    {% for restaurant in restaurants %}
+        {% set url_name = restaurant.name|replace(' ', '_') %}
+        <h2><a href="/restaurant/{{url_name}}">{{ restaurant[0] }}</a></h2>
+        <p><i>{{ restaurant.description }}</i></p>
+        <p>Avoinna klo: {{ restaurant.opening_time.strftime('%H:%M')}} - {{ restaurant.closing_time.strftime('%H:%M')}}</p>
+        <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}}{%else%}Ei arvosteluja{%endif%}</p>
+        <hr>
+    {% endfor %}
+{%else%}
+    <p>Ravintoloita ei vielä ole. Ylläpitäjät voivat lisätä niitä.</p>
+{%endif%}
