@@ -25,7 +25,7 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r ./requirements.txt
 ```
-Määritä vielä tietokannan skeema komennolla
+Määritä vielä tietokannan skeema tällä komennolla. Vaihda `schema.sql` vastaamaan tarkaa sijaintia, missä tiedosto on.
 ```
 $ psql < schema.sql
 ```
