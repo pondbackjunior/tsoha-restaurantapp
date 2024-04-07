@@ -25,11 +25,15 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r ./requirements.txt
 ```
-Määritä vielä tietokannan skeema tällä komennolla. Vaihda `schema.sql` vastaamaan tarkaa sijaintia, missä tiedosto on.
+Olettaen, että [https://github.com/hy-tsoha/local-pg](local-pg) on asennettu, käynnistä se komennolla
+```
+$ start-pg.sh
+```
+Erillisessä ikkunassa määritä vielä tietokannan skeema tällä komennolla. Vaihda `schema.sql` vastaamaan tarkaa sijaintia, missä tiedosto on.
 ```
 $ psql < schema.sql
 ```
-Nyt voit käynnistää sovelluksen komennolla
+Erillisessä ikkunassa nyt voit käynnistää sovelluksen komennolla
 ```
 $ flask run
 ```
