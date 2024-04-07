@@ -25,13 +25,13 @@ CREATE TABLE restaurants_ratings(
 CREATE TABLE groups(
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE
-)
+);
 
 CREATE TABLE restaurants_groups(
     id SERIAL PRIMARY KEY,
     restaurant_id INTEGER REFERENCES restaurants,
     group_id INTEGER REFERENCES groups
-)
+);
 
 INSERT INTO restaurants (name, description, opening_time, closing_time)
 VALUES ('McDonald''s Helsinki Kamppi', 'Pitkäikäinen pikaruokaketju, joka tunnetaan hampurilaisista ja ranskalaisista.', '00:00:00', '23:59:00');
