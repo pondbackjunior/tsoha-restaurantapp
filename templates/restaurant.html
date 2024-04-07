@@ -13,15 +13,15 @@
 <h2>Lisää arvostelu</h2>
 <form action="/restaurant/{{res_name}}" method="post">
     Viesti: <br>
-    <textarea name="comment" rows="3" cols="40"></textarea>
+    <textarea name="comment" rows="3" cols="40" required></textarea>
     <br>
     Montako tähteä:
     <p>
-        <input type="radio" name="rating" value="1"> 1
-        <input type="radio" name="rating" value="2"> 2
-        <input type="radio" name="rating" value="3"> 3
-        <input type="radio" name="rating" value="4"> 4
-        <input type="radio" name="rating" value="5"> 5
+        <input type="radio" name="rating" value="1" required> 1
+        <input type="radio" name="rating" value="2" required> 2
+        <input type="radio" name="rating" value="3" required> 3
+        <input type="radio" name="rating" value="4" required> 4
+        <input type="radio" name="rating" value="5" required> 5
     </p>
     <input type="submit" value="Lähetä">
     </form>
