@@ -1,18 +1,21 @@
-{% if session.user_id %}
-Olet kirjautunut sisään{% if session.user_role == "admin"%} <b>ylläpitäjänä</b>{%endif%}.
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<a href="/login"><big>Kirjaudu sisään</big></a>
-{% endif %}
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
 {% if session.user_id and session.user_role == "admin"%}
-<hr>
 Ylläpitäjän toiminnot:
-<a href="/create">Luo ravintola</a>
-{% endif %}
+<p><a href="/create_restaurant">Luo ravintola</a> | <a href="/create_category">Luo kategoria</a> | <a href="/remove_categories">Poista kategorioita</a></p>
 <hr>
-Tervetuloa ravintolasovellukseen.
+{% endif %}
+<p>Tervetuloa ravintolasovellukseen.</p>
+<form action="/result" method="GET">
+  Hae ravintolaa: <input type="text" name="query" maxlength="5000">
+  <input type="submit" value="Hae">
+  </form>
 <hr>
 <h1>Ravintolat</h1>
+<h2>Kartalla</h2>
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d496.1766224410657!2d24.930179968434533!3d60.1690431588295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sfi!4v1713567448875!5m2!1sen!2sfi" width="900" height="675" style="border:2px solid;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<h2>Listana</h2>
 <p>Järjestä:</p>
 <form action="/" method="post">
     <select name="order_by">
@@ -35,3 +38,4 @@ Tervetuloa ravintolasovellukseen.
 {%else%}
     <p>Ravintoloita ei vielä ole. Ylläpitäjät voivat lisätä niitä.</p>
 {%endif%}
+{% endblock %}

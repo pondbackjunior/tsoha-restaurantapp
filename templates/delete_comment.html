@@ -1,5 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Poista kommentti{% endblock %}
+{% block content %}
+{% set url_name = res_name|replace(' ', '_') %}
 <p>Haluatko varmasti poistaa arvostelun?</p>
-<form action="/delete_comment/{{comment_id}}" method="post">
+<form action="/restaurant/{{url_name}}/delete_comment/{{comment_id}}" method="post">
     <input type="submit" value="Poista">
-    <input type="button" value="Palaa takaisin" onclick="window.location.href='/'">
+    <input type="button" value="Palaa takaisin" onclick="window.location.href='/restaurant/{{url_name}}'">
 </form>
+{%endblock%}

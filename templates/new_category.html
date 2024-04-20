@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Uusi kategoria{% endblock %}
+{% block content %}
+<form action="/create_category" method="post">
+    Kategorian nimi: <textarea name="name" rows="1" cols="20" maxlength="100" required></textarea>
+    <p>
+    Tyyppi:
+    <p>
+        <input type="radio" name="type" value="categories" required> Ruokalaji
+        <input type="radio" name="type" value="types" required> Ravintolatyyppi
+    </p>
+    <input type="submit" value="Luo">
+    </form>
+{%endblock%}

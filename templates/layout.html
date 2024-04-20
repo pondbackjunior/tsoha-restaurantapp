@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ravintolasovellus - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href={{ url_for('static', filename='main.css') }}>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="header">
+        <div class="left">
+            <a href="/">Etusivu</a>
+        </div>
+        <div class="center">
+            <b>Ravintolasovellus</b>
+        </div>
+        <div class="right">
+            {% if session.user_id %}
+                <div class="user-greeting">Hei, {{ session.username }}!{% if session.user_role == "admin" %} <b>(Admin)</b>{% endif %}</div>
+                <div class="logout-link"><a href="/logout">Kirjaudu ulos</a></div>
+            {% else %}
+                <a href="/login">Kirjaudu sisään</a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

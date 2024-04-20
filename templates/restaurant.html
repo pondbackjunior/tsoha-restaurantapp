@@ -1,19 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}{{res_name}}{% endblock %}
+{% block content %}
 {% set url_name = res_name|replace(' ', '_') %}
 <a href="/">Palaa etusivulle</a>
 <hr>
 <h2>{{res_name}}</h2>
 <dl><dd><i>{{res_desc}}</i></dd></dl>
 <p>Avoinna klo: {{res_op.strftime('%H:%M')}} - {{res_cl.strftime('%H:%M')}}</p>
-<p>Arvosana (keskiarvo): {{res_rat}}</p>
+<p>Arvosana (keskiarvo): {%if res_rat == "0.00"%}Ei arvosteluja.{%else%}{{res_rat}}{%endif%}</p>
+{% if categories %}
+    <p>Ruokalajit: 
+        {% for category in categories %}
+            {{ category.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+{% endif %}
+{% if types %}
+    <p>Ravintolatyypit: 
+        {% for type in types %}
+            {{ type.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+{% endif %}
 {% if session.user_id and session.user_role == "admin"%}
-<p>Ylläpitäjän toiminnot: <a href="/delete_restaurant/{{url_name}}">Poista ravintola</a> | <a href="/edit_restaurant/{{url_name}}">Muokkaa ravintolaa</a></p>
+<hr>
+<p>Ylläpitäjän toiminnot: <a href="/delete_restaurant/{{url_name}}">Poista ravintola</a> | <a href="/edit_restaurant/{{url_name}}">Muokkaa ravintolaa</a><!--
+--> | <a href="/add_categories/{{url_name}}">Lisää ravintolalle kategorioita</a> | <a href="/delete_categories/{{url_name}}">Poista ravintolalta kategorioita</a> </p>
 {%endif%}
 <hr>
 {% if session.user_id %}
 <h2>Lisää arvostelu</h2>
 <form action="/restaurant/{{res_name}}" method="post">
     Viesti: <br>
-    <textarea name="comment" rows="3" cols="40" required></textarea>
+    <textarea name="comment" rows="3" cols="40" maxlength="2000" required></textarea>
     <br>
     Montako tähteä:
     <p>
@@ -29,7 +48,7 @@
 
 <h2>Arvostelut</h2>
 {%if comments%}
-    {{count}} arvostelua:
+    {{count}} {%if count == 1 %}arvostelu{%else%}arvostelua{%endif%}:
     <br>
     <hr>
     {% for comment in comments %}
@@ -37,9 +56,10 @@
         <p><i>Arvostelu:</i> {{ comment.comment }}</p>
         <p><i>Lähettäjä:</i> {{ comment.username }}</p>
         <p><i>Aika:</i> {{ comment.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-        {% if session.user_id and session.user_role == "admin"%}<a href="/delete_comment/{{comment.id}}">Poista arvostelu</a>{%endif%}
+        {% if session.user_id and session.user_role == "admin"%}<a href="/restaurant/{{url_name}}/delete_comment/{{comment.id}}">Poista arvostelu</a>{%endif%}
         <hr>
     {% endfor %}
 {%else%}
     <p>Arvosteluja ei vielä ole. {% if session.user_id %}Luo ensimmäinen arvostelu yläpuolelta!{%else%}Kirjaudu sisään luodaksesi arvostelun!{%endif%}</p>
 {%endif%}
+{%endblock%}

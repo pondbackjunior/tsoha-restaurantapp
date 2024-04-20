@@ -1,9 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}Rekisteröidy{% endblock %}
+{% block content %}
 <form action="/register" method="post">
-    Tunnus: <input type="text" name="username" maxlength="50" required>
+    Tunnus: <input type="text" name="username" minlength="3" maxlength="30" required>
     <p>
-    Salasana: <input type="password" name="password1" maxlength="50" required>
+    Salasana (väh. 6 merkkiä): <input type="password" name="password1" minlength="6" maxlength="50" required>
     <p>
-    Salasana uudestaan: <input type="password" name="password2" maxlength="50" required>
+    Salasana uudestaan: <input type="password" name="password2" minlength="6" maxlength="50" required>
     <p>
     <input type="submit" value="Luo tunnus">
     </form>
+{%endblock%}

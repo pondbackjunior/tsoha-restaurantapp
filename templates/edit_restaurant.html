@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Muokkaa ravintolaa{% endblock %}
+{% block content %}
 {% set url_name = res_name|replace(' ', '_') %}
 <p>Olet muokkaamassa ravintolaa: {{res_name}}</p>
 <form action="/edit_restaurant/{{url_name}}" method="post">
@@ -14,3 +17,4 @@
     <input type="submit" value="Muokkaa">
     <input type="button" value="Keskeytä muokkaus" onclick="window.location.href='/restaurant/{{url_name}}'">
     </form>
+{%endblock%}

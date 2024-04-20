@@ -1,12 +1,16 @@
-<form action="/create" method="post">
-    Ravintolan nimi: <textarea name="name" rows="1" cols="20" required></textarea>
+{% extends "layout.html" %}
+{% block title %}Uusi ravintola{% endblock %}
+{% block content %}
+<form action="/create_restaurant" method="post">
+    Ravintolan nimi: <textarea name="name" rows="1" cols="20" maxlength="100" required></textarea>
     <p>
     Ravintolan kuvaus:
     <br>
-    <textarea name="description" rows="3" cols="40" required></textarea>
+    <textarea name="description" rows="3" cols="40" maxlength="5000" required></textarea>
     <br>
     Aukeaa klo: <input type="time" name="opening_time" min="00:00" max="23:59" step="60" required>
     <br>
     Menee kiinni klo: <input type="time" name="closing_time" min="00:00" max="23:59" step="60" required>
     <input type="submit" value="Luo">
     </form>
+{%endblock%}
