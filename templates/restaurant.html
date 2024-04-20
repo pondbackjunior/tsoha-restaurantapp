@@ -2,8 +2,6 @@
 {% block title %}{{res_name}}{% endblock %}
 {% block content %}
 {% set url_name = res_name|replace(' ', '_') %}
-<a href="/">Palaa etusivulle</a>
-<hr>
 <h2>{{res_name}}</h2>
 <dl><dd><i>{{res_desc}}</i></dd></dl>
 <p>Avoinna klo: {{res_op.strftime('%H:%M')}} - {{res_cl.strftime('%H:%M')}}</p>
