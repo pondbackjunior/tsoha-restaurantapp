@@ -1,0 +1,25 @@
+/* Add CSS styles for the header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+/* Style for each section in the header */
+.header .center {
+    flex-grow: 1; /* Allows the center section to take up available space */
+    text-align: center; /* Centers the text */
+}
+
+/* Right section styling */
+.right {
+    display: flex; /* Allows child elements to be aligned */
+    flex-direction: column; /* Arrange child elements in a column */
+    align-items: flex-end; /* Align items to the right */
+}
+
+/* Style for user greeting and logout link */
+.right .logout-link {
+    margin-top: 4px; /* Add some space above the link */
+}
