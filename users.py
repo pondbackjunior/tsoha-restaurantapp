@@ -12,10 +12,12 @@ def login(username, password):
     else:
         if username == "admin" and password == "admin":
             session["user_id"] = user.id
+            session["username"] = username
             session["user_role"] = user.role
             return True
         if check_password_hash(user.password, password):
             session["user_id"] = user.id
+            session["username"] = username
             session["user_role"] = user.role
             return True
         else:

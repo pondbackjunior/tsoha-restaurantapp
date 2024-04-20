@@ -1,6 +1,7 @@
 from db import db
 import users
 from sqlalchemy.sql import text
+import datetime
 
 def get_list(order_by):
     sql = text(f"SELECT R.name, R.description, R.opening_time, R.closing_time, COALESCE(AVG(RR.rating),0) AS rating, R.id as newest FROM restaurants R \
@@ -28,11 +29,7 @@ def get_avg_rating(restaurant_name):
     else:
         return 0
 
-
 def create(name, description, opening_time, closing_time):
-    user_id = users.user_id()
-    if user_id == 0:
-        return False
     sql = text("INSERT INTO restaurants (name, description, opening_time, closing_time) VALUES (:name, :description, :opening_time, :closing_time)")
     db.session.execute(sql, {"name":name, "description":description, "opening_time":opening_time, "closing_time":closing_time})
     db.session.commit()
@@ -80,3 +77,8 @@ def edit_restaurant(name, description, opening_time, closing_time, res_id):
     db.session.execute(sql, {"name":name, "description":description, "opening_time":opening_time, "closing_time":closing_time})
     db.session.commit()
     return True
+
+def get_today_weekday():
+    today = datetime.datetime.today()
+    weekday_name = today.strftime('%A')
+    return weekday_name
