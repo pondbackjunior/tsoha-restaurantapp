@@ -3,10 +3,12 @@ from flask import render_template, request, redirect
 import users, restaurants, categories
 from db import db
 from sqlalchemy.sql import text
+from os import getenv
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
+        api_key = getenv("API_KEY")
         users.generate_default_admin()
         today = restaurants.get_today_weekday()
         try:
@@ -16,7 +18,7 @@ def index():
             print(e) 
             order_by = "newest"
             restaurant_list = restaurants.get_list(order_by)
-        return render_template("index.html", order_by=order_by, count=len(restaurant_list), restaurants=restaurant_list, today=today)
+        return render_template("index.html", order_by=order_by, count=len(restaurant_list), restaurants=restaurant_list, today=today, api_key=api_key)
     if request.method == "POST":
         order_by = request.form["order_by"]
         return redirect(f"/?order_by={order_by}")
