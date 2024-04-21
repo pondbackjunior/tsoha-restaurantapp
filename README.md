@@ -2,7 +2,9 @@
 
 Sovelluksessa näkyy tietyn alueen ravintolat, joista voi etsiä tietoa ja lukea arvioita. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
 
-Sovellus luo muutaman esimerkkiravintolan käynnistäessä. Toimintoja voi testata tekemällä uuden tilin tai testaamalla ylläpitäjätoimintoja käyttämällä käyttäjänimeä `admin` salasanalla `admin`, jotka on kovakoodattu.
+Sovelluksessa on muutama esimerkkiravintola luotuna valmiiksi. 
+
+Toimintoja voi testata tekemällä uuden tilin tai testaamalla ylläpitäjätoimintoja käyttämällä käyttäjänimeä `admin` salasanalla `admin`, jotka on kovakoodattu.
 
 Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly.dev/. (Jos sivusto näyttää ekalla avauksella erroria, päivitä sivu ja pitäisi toimia).
 
