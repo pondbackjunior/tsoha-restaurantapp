@@ -18,7 +18,7 @@ Tällä hetkellä ravintolat näkyy listana, ei kartassa.
 
 ## Välipalautus 3 (21.4.2024)
 Sovellukseen on lisätty seuraavat toiminnot:
-* Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa on annettu sana.
+* Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa tai nimessä on annettu sana.
 * Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
 * Ravintoloiden tietojen määrää on lisätty, ja kartta on aloitettu.
 
