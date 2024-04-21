@@ -1,10 +1,21 @@
 {% extends "layout.html" %}
-{% block title %}{{res_name}}{% endblock %}
+{% block title %}{{restaurant.name}}{% endblock %}
 {% block content %}
-{% set url_name = res_name|replace(' ', '_') %}
-<h2>{{res_name}}</h2>
-<dl><dd><i>{{res_desc}}</i></dd></dl>
-<p>Avoinna klo: {{res_op.strftime('%H:%M')}} - {{res_cl.strftime('%H:%M')}}</p>
+{% set url_name = restaurant.name|replace(' ', '_') %}
+<h2>{{restaurant.name}}</h2>
+<dl><dd><i>{{restaurant.description}}</i></dd></dl>
+<h3>Aukioloajat</h3>
+<p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
+<ul>
+    <li>Maanantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_mon%}{{ restaurant.open_mon.strftime('%H:%M')}} - {{ restaurant.close_mon.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Tiistai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_tue%}{{ restaurant.open_tue.strftime('%H:%M')}} - {{ restaurant.close_tue.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Keskiviikko: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_wed%}{{ restaurant.open_wed.strftime('%H:%M')}} - {{ restaurant.close_wed.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Torstai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_thu%}{{ restaurant.open_thu.strftime('%H:%M')}} - {{ restaurant.close_thu.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Perjantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_fri%}{{ restaurant.open_fri.strftime('%H:%M')}} - {{ restaurant.close_fri.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Lauantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sat%}{{ restaurant.open_sat.strftime('%H:%M')}} - {{ restaurant.close_sat.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+    <li>Sunnuntai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sun%}{{ restaurant.open_sun.strftime('%H:%M')}} - {{ restaurant.close_sun.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+</ul>
+<h3>Tiedot</h3>
 <p>Arvosana (keskiarvo): {%if res_rat == "0.00"%}Ei arvosteluja.{%else%}{{res_rat}}{%endif%}</p>
 {% if categories %}
     <p>Ruokalajit: 
@@ -28,7 +39,7 @@
 <hr>
 {% if session.user_id %}
 <h2>Lisää arvostelu</h2>
-<form action="/restaurant/{{res_name}}" method="post">
+<form action="/restaurant/{{restaurant.name}}" method="post">
     Viesti: <br>
     <textarea name="comment" rows="3" cols="40" maxlength="2000" required></textarea>
     <br>

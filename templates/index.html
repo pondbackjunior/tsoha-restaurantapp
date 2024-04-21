@@ -36,9 +36,9 @@ Ylläpitäjän toiminnot:
 {%if restaurants%}
     {% for restaurant in restaurants %}
         {% set url_name = restaurant.name|replace(' ', '_') %}
-        <h2><a href="/restaurant/{{url_name}}">{{ restaurant[0] }}</a></h2>
+        <h2><a href="/restaurant/{{url_name}}">{{ restaurant.name }}</a></h2>
         <p><i>{{ restaurant.description }}</i></p>
-        <p>Avoinna klo: {{ restaurant.opening_time.strftime('%H:%M')}} - {{ restaurant.closing_time.strftime('%H:%M')}}</p>
+        <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
         <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}}{%else%}Ei arvosteluja{%endif%}</p>
         <hr>
     {% endfor %}

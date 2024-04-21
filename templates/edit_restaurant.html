@@ -4,15 +4,61 @@
 {% set url_name = res_name|replace(' ', '_') %}
 <p>Olet muokkaamassa ravintolaa: {{res_name}}</p>
 <form action="/edit_restaurant/{{url_name}}" method="post">
-    Ravintolan nimi: <textarea name="name" rows="1" cols="20" required></textarea>
+    <h3>Ravintolan nimi</h3>
+    <textarea name="name" rows="1" cols="20" maxlength="100" required></textarea>
+    <h3>Kuvaus</h3>
+    <textarea name="description" rows="3" cols="40" maxlength="5000" required></textarea>
+    <br>
+    <h3>Osoite</h3>
+    <textarea name="address" rows="1" cols="50" maxlength="300" required></textarea>
+    <br>
+    <h3>Koordinaatit</h3>
+    <details><summary><i>(Mistä saan koordinaatit?)</i></summary>
+        <p>Tähtää Google Mapsissa johonkin kohtaan kartalta, tai valitse joku valmis merkki (kuten ravintola). Klikkaa sitä hiiren oikealla näppäimellä, ja koordinaatit ovat ensimmäisenä listalla.</p>
+    </details>
+    X-koordinaatti:
+    <br>
+    <textarea name="coord_x" rows="1" cols="40" maxlength="100" required></textarea>
+    <br>
+    Y-koordinaatti:
+    <br>
+    <textarea name="coord_y" rows="1" cols="40" maxlength="100" required></textarea>
+    <br>
+    <h3>Aukioloajat</h3>
+    Onko auki 24h?
     <p>
-    Ravintolan kuvaus:
+        <input type="radio" name="is_24h" value="TRUE" required> Kyllä
+        <input type="radio" name="is_24h" value="FALSE" required> Ei
+    </p>
+    <b>Jätä aukioloaika tyhjäksi, jos ravintola on sinä päivänä suljettu.<br>Älä aseta aukioloaikoja ollenkaan, jos ravintola on auki 24h.</b>
     <br>
-    <textarea name="description" rows="3" cols="40" required></textarea>
+    Aukeaa (ma): <input type="time" name="open_mon" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (ma): <input type="time" name="close_mon" min="00:00" max="23:59" step="60">
     <br>
-    Aukeaa klo: <input type="time" name="opening_time" min="00:00" max="23:59" step="60" required>
+    Aukeaa (ti): <input type="time" name="open_tue" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (ti): <input type="time" name="close_tue" min="00:00" max="23:59" step="60">
     <br>
-    Menee kiinni klo: <input type="time" name="closing_time" min="00:00" max="23:59" step="60" required>
+    Aukeaa (ke): <input type="time" name="open_wed" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (ke): <input type="time" name="close_wed" min="00:00" max="23:59" step="60">
+    <br>
+    Aukeaa (to): <input type="time" name="open_thu" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (to): <input type="time" name="close_thu" min="00:00" max="23:59" step="60">
+    <br>
+    Aukeaa (pe): <input type="time" name="open_fri" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (pe): <input type="time" name="close_fri" min="00:00" max="23:59" step="60">
+    <br>
+    Aukeaa (la): <input type="time" name="open_sat" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (la): <input type="time" name="close_sat" min="00:00" max="23:59" step="60">
+    <br>
+    Aukeaa (su): <input type="time" name="open_sun" min="00:00" max="23:59" step="60">
+    
+    Sulkeutuu (su): <input type="time" name="close_sun" min="00:00" max="23:59" step="60">
     <br>
     <input type="submit" value="Muokkaa">
     <input type="button" value="Keskeytä muokkaus" onclick="window.location.href='/restaurant/{{url_name}}'">

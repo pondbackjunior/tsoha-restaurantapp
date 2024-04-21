@@ -4,23 +4,29 @@ from sqlalchemy.sql import text
 import datetime
 
 def get_list(order_by):
-    sql = text(f"SELECT R.name, R.description, R.opening_time, R.closing_time, COALESCE(AVG(RR.rating),0) AS rating, R.id as newest FROM restaurants R \
-               LEFT JOIN restaurants_ratings RR ON R.id=RR.restaurant_id GROUP BY R.id \
-               ORDER BY {order_by} DESC")
+    sql = text(f"""SELECT COALESCE(AVG(RR.rating),0) AS rating, R.id as newest,
+               R.name, R.description, R.address, R.coord_x, R.coord_y, R.is_24h,
+               R.open_mon, R.close_mon, R.open_tue, R.close_tue, R.open_wed, R.close_wed, R.open_thu, R.close_thu,
+               R.open_fri, R.close_fri, R.open_sat, R.close_sat, R.open_sun, R.close_sun
+               FROM restaurants R
+               LEFT JOIN restaurants_ratings RR ON R.id=RR.restaurant_id GROUP BY R.id
+               ORDER BY {order_by} DESC""")
     result = db.session.execute(sql)
     return result.fetchall()
 
 def get_details(restaurant_name):
-    sql = text("SELECT name, description, opening_time, closing_time, id FROM restaurants WHERE name=:name")
+    sql = text("""SELECT id, name, description, address, coord_x, coord_y, is_24h,
+               open_mon, close_mon, open_tue, close_tue, open_wed, close_wed, open_thu, close_thu,
+               open_fri, close_fri, open_sat, close_sat, open_sun, close_sun FROM restaurants WHERE name=:name""")
     result = db.session.execute(sql, {"name":restaurant_name.replace("_", " ")})
     res = result.fetchall()
     if res:
-        return res
+        return res[0]
     else:
         return None
 
 def get_avg_rating(restaurant_name):
-    id = restaurant_id_from_name(restaurant_name)
+    id = get_details(restaurant_name).id
     sql = text("SELECT AVG(RR.rating) FROM restaurants_ratings RR, restaurants R WHERE RR.restaurant_id=R.id AND R.id=:id")
     result = db.session.execute(sql, {"id":id})
     res = result.fetchone()[0]
@@ -29,26 +35,27 @@ def get_avg_rating(restaurant_name):
     else:
         return 0
 
-def create(name, description, opening_time, closing_time):
-    sql = text("INSERT INTO restaurants (name, description, opening_time, closing_time) VALUES (:name, :description, :opening_time, :closing_time)")
-    db.session.execute(sql, {"name":name, "description":description, "opening_time":opening_time, "closing_time":closing_time})
+def create(name, description, address, coord_x, coord_y, is_24h,
+            open_mon=None, close_mon=None, open_tue=None, close_tue=None, open_wed=None, close_wed=None, open_thu=None, close_thu=None,
+           open_fri=None, close_fri=None, open_sat=None, close_sat=None, open_sun=None, close_sun=None):
+    sql = text(f"""INSERT INTO restaurants (name, description, address, coord_x, coord_y, 
+                is_24h, open_mon, close_mon, open_tue, close_tue, open_wed, close_wed, open_thu, close_thu,
+                open_fri, close_fri, open_sat, close_sat, open_sun, close_sun)
+                VALUES (:name, :description, :address, :coord_x, :coord_y, 
+                :is_24h, :open_mon, :close_mon, :open_tue, :close_tue, :open_wed, :close_wed, :open_thu, :close_thu,
+                :open_fri, :close_fri, :open_sat, :close_sat, :open_sun, :close_sun)""")
+    db.session.execute(sql, {"name":name, "description":description, "address":address, "coord_x":coord_x, "coord_y":coord_y,
+                             "is_24h":is_24h, "open_mon":open_mon, "close_mon":close_mon, "open_tue":open_tue, "close_tue":close_tue,
+                             "open_wed":open_wed, "close_wed":close_wed, "open_thu":open_thu, "close_thu":close_thu, "open_fri":open_fri,
+                             "close_fri":close_fri, "open_sat":open_sat, "close_sat":close_sat, "open_sun":open_sun, "close_sun":close_sun,})
     db.session.commit()
     return True
-
-def restaurant_id_from_name(name):
-    sql = text("SELECT R.id FROM restaurants R WHERE name = :name")
-    result = db.session.execute(sql, {"name":name})
-    res = result.fetchone()
-    if res:
-        return res[0]
-    else:
-        return None
 
 def comment(comment, rating, restaurant_name):
     user_id = users.user_id()
     if user_id == 0:
         return False
-    restaurant_id = restaurant_id_from_name(restaurant_name)
+    restaurant_id = get_details(restaurant_name).id
     sql = text("INSERT INTO restaurants_ratings (comment, rating, user_id, restaurant_id, sent_at) VALUES (:comment, :rating, :user_id, :restaurant_id, NOW())")
     db.session.execute(sql, {"comment":comment, "rating":rating, "user_id":user_id, "restaurant_id":restaurant_id})
     db.session.commit()
@@ -72,13 +79,21 @@ def delete_restaurant(res_id):
     db.session.commit()
     return True
 
-def edit_restaurant(name, description, opening_time, closing_time, res_id):
-    sql = text(f"UPDATE restaurants SET name=:name, description=:description, opening_time=:opening_time, closing_time=:closing_time WHERE id={res_id}")
-    db.session.execute(sql, {"name":name, "description":description, "opening_time":opening_time, "closing_time":closing_time})
+def edit_restaurant(res_id, name, description, address, coord_x, coord_y, is_24h,
+            open_mon=None, close_mon=None, open_tue=None, close_tue=None, open_wed=None, close_wed=None, open_thu=None, close_thu=None,
+           open_fri=None, close_fri=None, open_sat=None, close_sat=None, open_sun=None, close_sun=None):
+    sql = text(f"""UPDATE restaurants SET name=:name, description=:description, address=:address, coord_x=:coord_x, coord_y=:coord_y, 
+                is_24h=:is_24h, open_mon=:open_mon, close_mon=:close_mon, open_tue=:open_tue, close_tue=:close_tue, open_wed=:open_wed, close_wed=:close_wed,
+               open_thu=:open_thu, close_thu=:close_thu, open_fri=:open_fri, close_fri=:close_fri, open_sat=:open_sat, close_sat=:close_sat, open_sun=:open_sun, close_sun=:close_sun
+               WHERE id={res_id}""")
+    db.session.execute(sql, {"name":name, "description":description, "address":address, "coord_x":coord_x, "coord_y":coord_y,
+                             "is_24h":is_24h, "open_mon":open_mon, "close_mon":close_mon, "open_tue":open_tue, "close_tue":close_tue,
+                             "open_wed":open_wed, "close_wed":close_wed, "open_thu":open_thu, "close_thu":close_thu, "open_fri":open_fri,
+                             "close_fri":close_fri, "open_sat":open_sat, "close_sat":close_sat, "open_sun":open_sun, "close_sun":close_sun,})
     db.session.commit()
     return True
 
 def get_today_weekday():
     today = datetime.datetime.today()
-    weekday_name = today.strftime('%A')
+    weekday_name = today.strftime('%a').lower()
     return weekday_name

@@ -70,14 +70,33 @@ def create_restaurant():
     if request.method == "GET":
         return render_template("new_restaurant.html")
     if request.method == "POST":
-        name = request.form["name"]
-        description = request.form["description"]
-        opening_time = request.form["opening_time"]
-        closing_time = request.form["closing_time"]
-        if restaurants.create(name, description, opening_time, closing_time):
-            return redirect("/")
-        else:
-            return render_template("error.html", message="Luominen ei onnistunut")
+        try:
+            name = request.form["name"]
+            description = request.form["description"]
+            address = request.form["address"]
+            coord_x = float(request.form["coord_x"])
+            coord_y = float(request.form["coord_y"])
+            is_24h = request.form["is_24h"]
+            # Initialize dictionaries for open/close times
+            opening_times = {}
+            
+            # Retrieve form inputs for opening and closing times, handle empty values
+            for day in ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]:
+                open_time = request.form.get(f"open_{day}")
+                close_time = request.form.get(f"close_{day}")
+                
+                # Only add times to the dictionary if they're not empty
+                if open_time:
+                    opening_times[f"open_{day}"] = open_time
+                if close_time:
+                    opening_times[f"close_{day}"] = close_time
+            if restaurants.create(name, description, address, coord_x, coord_y, is_24h, **opening_times):
+                return redirect("/")
+            else:
+                return render_template("error.html", message="Luominen ei onnistunut")
+        except ValueError:
+            # Handle the case where coord_x or coord_y could not be converted to float
+            return render_template("error.html", message="Virheelliset koordinaatit, yritä uudelleen.")
 
 @app.route("/create_category", methods=["GET", "POST"])
 def create_category():
@@ -96,18 +115,16 @@ def create_category():
 @app.route("/restaurant/<restaurant_name>", methods=["GET", "POST"])
 def restaurant(restaurant_name):
     if request.method == "GET":
-        res_name = restaurants.get_details(restaurant_name)[0][0]
-        res_desc = restaurants.get_details(restaurant_name)[0][1]
-        res_op = restaurants.get_details(restaurant_name)[0][2]
-        res_cl = restaurants.get_details(restaurant_name)[0][3]
+        restaurant = restaurants.get_details(restaurant_name)
         res_rat = f"{restaurants.get_avg_rating(restaurant_name):.2f}"
-        res_id = restaurants.get_details(restaurant_name)[0][4]
-        category_list = categories.get_categories_for_restaurant(res_id)
-        type_list = categories.get_types_for_restaurant(res_id)
-        comment_list = restaurants.get_comment_list(res_name)
-        if res_name:
-            return render_template("restaurant.html", res_name=res_name, res_desc=res_desc, res_op=res_op, res_cl=res_cl, res_rat=res_rat,
-                                   count=len(comment_list), comments=comment_list, categories=category_list, types=type_list)
+        category_list = categories.get_categories_for_restaurant(restaurant.id)
+        type_list = categories.get_types_for_restaurant(restaurant.id)
+        comment_list = restaurants.get_comment_list(restaurant.name)
+        today = restaurants.get_today_weekday()
+        if restaurant.name:
+            return render_template("restaurant.html", restaurant=restaurant, res_rat=res_rat,
+                                   count=len(comment_list), comments=comment_list, categories=category_list,
+                                   types=type_list, today=today)
         else:
             return "Ravintolaa ei löytynyt", 404
     if request.method == "POST":
@@ -124,12 +141,11 @@ def restaurant(restaurant_name):
 def delete_restaurant(restaurant_name):
     if users.user_role() != "admin" or users.user_id() == 0:
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
-    res_name = restaurants.get_details(restaurant_name)[0][0]
-    res_id = restaurants.get_details(restaurant_name)[0][4]
+    restaurant = restaurants.get_details(restaurant_name)
     if request.method == "GET":
-        return render_template("delete_restaurant.html", res_name=res_name)
+        return render_template("delete_restaurant.html", res_name=restaurant.name)
     if request.method == "POST":
-        if restaurants.delete_restaurant(res_id):
+        if restaurants.delete_restaurant(restaurant.id):
             return redirect("/")
         else:
             return render_template("error.html", message="Poistaminen ei onnistunut")
@@ -156,30 +172,48 @@ def remove_categories():
 def edit_restaurant(restaurant_name):
     if users.user_role() != "admin" or users.user_id() == 0:
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
-    res_name = restaurants.get_details(restaurant_name)[0][0]
-    res_id = restaurants.get_details(restaurant_name)[0][4]
+    restaurant = restaurants.get_details(restaurant_name)
     if request.method == "GET":
-        return render_template("edit_restaurant.html", res_name=res_name)
+        return render_template("edit_restaurant.html", res_name=restaurant.name)
     if request.method == "POST":
-        name = request.form["name"]
-        description = request.form["description"]
-        opening_time = request.form["opening_time"]
-        closing_time = request.form["closing_time"]
-        if restaurants.edit_restaurant(name, description, opening_time, closing_time, res_id):
-            return redirect(f"/restaurant/{name.replace(' ', '_')}")
-        else:
-            return render_template("error.html", message="Muokkaaminen ei onnistunut")
+        try:
+            name = request.form["name"]
+            description = request.form["description"]
+            address = request.form["address"]
+            coord_x = float(request.form["coord_x"])
+            coord_y = float(request.form["coord_y"])
+            is_24h = request.form["is_24h"]
+            # Initialize dictionaries for open/close times
+            opening_times = {}
+            
+            # Retrieve form inputs for opening and closing times, handle empty values
+            for day in ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]:
+                open_time = request.form.get(f"open_{day}")
+                close_time = request.form.get(f"close_{day}")
+                
+                # Only add times to the dictionary if they're not empty
+                if open_time:
+                    opening_times[f"open_{day}"] = open_time
+                if close_time:
+                    opening_times[f"close_{day}"] = close_time
+            if restaurants.edit_restaurant(restaurant.id, name, description, address, coord_x, coord_y, is_24h, **opening_times):
+                return redirect(f"/restaurant/{name.replace(' ', '_')}")
+            else:
+                return render_template("error.html", message="Muokkaaminen ei onnistunut")
+        except ValueError:
+            # Handle the case where coord_x or coord_y could not be converted to float
+            return render_template("error.html", message="Virheelliset koordinaatit, yritä uudelleen.")
         
 @app.route("/restaurant/<restaurant_name>/delete_comment/<comment_id>", methods=["GET", "POST"])
 def delete_comment(restaurant_name, comment_id):
     if users.user_role() != "admin" or users.user_id() == 0:
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
-    res_name = restaurants.get_details(restaurant_name)[0][0]
+    restaurant = restaurants.get_details(restaurant_name)
     if request.method == "GET":
-        return render_template("delete_comment.html", comment_id=comment_id, res_name=res_name)
+        return render_template("delete_comment.html", comment_id=comment_id, res_name=restaurant.name)
     if request.method == "POST":
         if restaurants.delete_comment(comment_id):
-            return redirect(f"/restaurant/{res_name.replace(' ', '_')}")
+            return redirect(f"/restaurant/{restaurant.name.replace(' ', '_')}")
         else:
             return render_template("error.html", message="Poistaminen ei onnistunut")
         
@@ -189,24 +223,23 @@ def add_categories(restaurant_name):
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
     category_list = categories.get_category_list()
     type_list = categories.get_type_list()
-    res_name = restaurants.get_details(restaurant_name)[0][0]
-    res_id = restaurants.get_details(restaurant_name)[0][4]
+    restaurant = restaurants.get_details(restaurant_name)
 
     # Get assigned categories and types
-    assigned_categories = categories.get_assigned_categories(res_id)
-    assigned_types = categories.get_assigned_types(res_id)
+    assigned_categories = categories.get_assigned_categories(restaurant.id)
+    assigned_types = categories.get_assigned_types(restaurant.id)
 
     # Filter out assigned categories and types
     categories_to_add = [category for category in category_list if category[0] not in assigned_categories]
     types_to_add = [type for type in type_list if type[0] not in assigned_types]
 
     if request.method == "GET":
-        return render_template("add_categories.html", res_name=res_name, res_id=res_id, categories=categories_to_add, types=types_to_add)
+        return render_template("add_categories.html", res_name=restaurant.name, res_id=restaurant.id, categories=categories_to_add, types=types_to_add)
     if request.method == "POST":
         added_categories = request.form.getlist("categories[]")
         added_types = request.form.getlist("types[]")
-        if categories.add_categories(res_id, added_categories, added_types):
-            return redirect(f"/restaurant/{res_name.replace(' ', '_')}")
+        if categories.add_categories(restaurant.id, added_categories, added_types):
+            return redirect(f"/restaurant/{restaurant.name.replace(' ', '_')}")
         else:
             return render_template("error.html", message="Muokkaaminen ei onnistunut")
         
@@ -214,19 +247,18 @@ def add_categories(restaurant_name):
 def delete_categories(restaurant_name):
     if users.user_role() != "admin" or users.user_id() == 0:
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
-    res_name = restaurants.get_details(restaurant_name)[0][0]
-    res_id = restaurants.get_details(restaurant_name)[0][4]
+    restaurant = restaurants.get_details(restaurant_name)
 
     # Get assigned categories and types
-    assigned_categories = categories.get_categories_for_restaurant(res_id)
-    assigned_types = categories.get_types_for_restaurant(res_id)
+    assigned_categories = categories.get_categories_for_restaurant(restaurant.id)
+    assigned_types = categories.get_types_for_restaurant(restaurant.id)
 
     if request.method == "GET":
-        return render_template("delete_restaurant_categories.html", res_name=res_name, res_id=res_id, categories=assigned_categories, types=assigned_types)
+        return render_template("delete_restaurant_categories.html", res_name=restaurant.name, res_id=restaurant.id, categories=assigned_categories, types=assigned_types)
     if request.method == "POST":
         deleted_categories = request.form.getlist("categories[]")
         deleted_types = request.form.getlist("types[]")
-        if categories.delete_categories(res_id, deleted_categories, deleted_types):
-            return redirect(f"/restaurant/{res_name.replace(' ', '_')}")
+        if categories.delete_categories(restaurant.id, deleted_categories, deleted_types):
+            return redirect(f"/restaurant/{restaurant.name.replace(' ', '_')}")
         else:
             return render_template("error.html", message="Muokkaaminen ei onnistunut")
