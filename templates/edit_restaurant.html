@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa ravintolaa{% endblock %}
 {% block content %}
-{% set url_name = res_name|replace(' ', '_') %}
-<p>Olet muokkaamassa ravintolaa: {{res_name}}</p>
+{% set url_name = restaurant.name|replace(' ', '_') %}
+<p>Olet muokkaamassa ravintolaa: {{restaurant.name}}</p>
 <form action="/edit_restaurant/{{url_name}}" method="post">
     <h3>Ravintolan nimi</h3>
-    <textarea name="name" rows="1" cols="20" maxlength="100" required></textarea>
+    <textarea name="name" rows="1" cols="20" maxlength="100" required>{{restaurant.name}}</textarea>
     <h3>Kuvaus</h3>
-    <textarea name="description" rows="3" cols="40" maxlength="5000" required></textarea>
+    <textarea name="description" rows="10" cols="100" maxlength="5000" required>{{restaurant.description}}</textarea>
     <br>
     <h3>Osoite</h3>
-    <textarea name="address" rows="1" cols="50" maxlength="300" required></textarea>
+    <textarea name="address" rows="1" cols="50" maxlength="300" required>{{restaurant.address}}</textarea>
     <br>
     <h3>Koordinaatit</h3>
     <details><summary><i>(Mistä saan koordinaatit?)</i></summary>
@@ -18,11 +18,11 @@
     </details>
     X-koordinaatti:
     <br>
-    <textarea name="coord_x" rows="1" cols="40" maxlength="100" required></textarea>
+    <textarea name="coord_x" rows="1" cols="40" maxlength="100" required>{{restaurant.coord_x}}</textarea>
     <br>
     Y-koordinaatti:
     <br>
-    <textarea name="coord_y" rows="1" cols="40" maxlength="100" required></textarea>
+    <textarea name="coord_y" rows="1" cols="40" maxlength="100" required>{{restaurant.coord_y}}</textarea>
     <br>
     <h3>Aukioloajat</h3>
     Onko auki 24h?
@@ -32,33 +32,33 @@
     </p>
     <b>Jätä aukioloaika tyhjäksi, jos ravintola on sinä päivänä suljettu.<br>Älä aseta aukioloaikoja ollenkaan, jos ravintola on auki 24h.</b>
     <br>
-    Aukeaa (ma): <input type="time" name="open_mon" min="00:00" max="23:59" step="60">
+    Aukeaa (ma): <input type="time" name="open_mon" min="00:00" max="23:59" step="60" value="{{restaurant.open_mon}}">
     
-    Sulkeutuu (ma): <input type="time" name="close_mon" min="00:00" max="23:59" step="60">
+    Sulkeutuu (ma): <input type="time" name="close_mon" min="00:00" max="23:59" step="60" value="{{restaurant.open_mon}}">
     <br>
-    Aukeaa (ti): <input type="time" name="open_tue" min="00:00" max="23:59" step="60">
+    Aukeaa (ti): <input type="time" name="open_tue" min="00:00" max="23:59" step="60" value="{{restaurant.open_tue}}">
     
-    Sulkeutuu (ti): <input type="time" name="close_tue" min="00:00" max="23:59" step="60">
+    Sulkeutuu (ti): <input type="time" name="close_tue" min="00:00" max="23:59" step="60" value="{{restaurant.open_tue}}">
     <br>
-    Aukeaa (ke): <input type="time" name="open_wed" min="00:00" max="23:59" step="60">
+    Aukeaa (ke): <input type="time" name="open_wed" min="00:00" max="23:59" step="60" value="{{restaurant.open_wed}}">
     
-    Sulkeutuu (ke): <input type="time" name="close_wed" min="00:00" max="23:59" step="60">
+    Sulkeutuu (ke): <input type="time" name="close_wed" min="00:00" max="23:59" step="60" value="{{restaurant.open_wed}}">
     <br>
-    Aukeaa (to): <input type="time" name="open_thu" min="00:00" max="23:59" step="60">
+    Aukeaa (to): <input type="time" name="open_thu" min="00:00" max="23:59" step="60" value="{{restaurant.open_thu}}">
     
-    Sulkeutuu (to): <input type="time" name="close_thu" min="00:00" max="23:59" step="60">
+    Sulkeutuu (to): <input type="time" name="close_thu" min="00:00" max="23:59" step="60" value="{{restaurant.open_thu}}">
     <br>
-    Aukeaa (pe): <input type="time" name="open_fri" min="00:00" max="23:59" step="60">
+    Aukeaa (pe): <input type="time" name="open_fri" min="00:00" max="23:59" step="60" value="{{restaurant.open_fri}}">
     
-    Sulkeutuu (pe): <input type="time" name="close_fri" min="00:00" max="23:59" step="60">
+    Sulkeutuu (pe): <input type="time" name="close_fri" min="00:00" max="23:59" step="60" value="{{restaurant.open_fri}}">
     <br>
-    Aukeaa (la): <input type="time" name="open_sat" min="00:00" max="23:59" step="60">
+    Aukeaa (la): <input type="time" name="open_sat" min="00:00" max="23:59" step="60" value="{{restaurant.open_sat}}">
     
-    Sulkeutuu (la): <input type="time" name="close_sat" min="00:00" max="23:59" step="60">
+    Sulkeutuu (la): <input type="time" name="close_sat" min="00:00" max="23:59" step="60" value="{{restaurant.open_sat}}">
     <br>
-    Aukeaa (su): <input type="time" name="open_sun" min="00:00" max="23:59" step="60">
+    Aukeaa (su): <input type="time" name="open_sun" min="00:00" max="23:59" step="60" value="{{restaurant.open_sun}}">
     
-    Sulkeutuu (su): <input type="time" name="close_sun" min="00:00" max="23:59" step="60">
+    Sulkeutuu (su): <input type="time" name="close_sun" min="00:00" max="23:59" step="60" value="{{restaurant.open_sun}}">
     <br>
     <input type="submit" value="Muokkaa">
     <input type="button" value="Keskeytä muokkaus" onclick="window.location.href='/restaurant/{{url_name}}'">

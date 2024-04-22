@@ -175,7 +175,7 @@ def edit_restaurant(restaurant_name):
         return render_template("error.html", message="Ei oikeutta nähdä sivua")
     restaurant = restaurants.get_details(restaurant_name)
     if request.method == "GET":
-        return render_template("edit_restaurant.html", res_name=restaurant.name)
+        return render_template("edit_restaurant.html", restaurant=restaurant)
     if request.method == "POST":
         try:
             name = request.form["name"]
