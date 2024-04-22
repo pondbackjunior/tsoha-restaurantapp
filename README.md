@@ -22,9 +22,10 @@ Tällä hetkellä ravintolat näkyy listana, ei kartassa.
 Sovellukseen on lisätty seuraavat toiminnot:
 * Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa tai nimessä on annettu sana.
 * Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
-* Ravintoloiden tietojen määrää on lisätty, ja kartta on aloitettu.
+* Ravintoloiden tietojen määrää on lisätty.
+* Kartta on lisätty, ja painamalla ravintoloita näkee sen nimen ja osoitteen. Painamalla nimeä pääsee ravintolan sivulle.
 
-Tällä hetkellä kartta on vielä hieman kesken. Se ei siis näytä ravintoloita siinä vielä. Kaikki muut sovelluksen ominaisuudet ovat kuitenkin käytännössä valmiita, eli sovellus tarvii vielä hieman viimestelyä ja ulkoasun parantamista.
+Kaikki sovelluksen ominaisuudet ovat käytännössä tehty, eli sovellus tarvii vielä hieman viimestelyä ja ulkoasun parantamista.
 <!--
 # Käynnistysohjeet
 
