@@ -14,6 +14,14 @@ def get_list(order_by):
     result = db.session.execute(sql)
     return result.fetchall()
 
+def get_dict_list():
+    sql = text("SELECT id, name, description, address, coord_x, coord_y FROM restaurants")
+    result = db.session.execute(sql)
+    
+    restaurant_list = [dict(row) for row in result.mappings().all()]
+    
+    return restaurant_list
+
 def get_details(restaurant_name):
     sql = text("""SELECT id, name, description, address, coord_x, coord_y, is_24h,
                open_mon, close_mon, open_tue, close_tue, open_wed, close_wed, open_thu, close_thu,

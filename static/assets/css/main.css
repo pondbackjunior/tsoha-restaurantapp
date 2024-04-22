@@ -30,7 +30,19 @@ html{
 
 #map {
     height: 600px; /* The height is 400 pixels */
-    width: 800px; /* The width is the width of the web page */
+    width: 100%; /* The width is the width of the web page */
     border: 2px solid;
+}
+
+#map-restaurantpage {
+    height: 250px; /* The height is 400 pixels */
+    width: 400px; /* The width is the width of the web page */
+    border: 2px solid;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 20px; /* Add space between columns */
 }
   

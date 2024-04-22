@@ -32,17 +32,21 @@ Ylläpitäjän toiminnot:
     <input type="submit" value="Järjestä">
   </form>
   
-<hr>
 {%if restaurants%}
     {% for restaurant in restaurants %}
         {% set url_name = restaurant.name|replace(' ', '_') %}
+        <hr>
         <h2><a href="/restaurant/{{url_name}}">{{ restaurant.name }}</a></h2>
         <p><i>{{ restaurant.description }}</i></p>
+        <p><b>{{restaurant.address}}</b></p>
         <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
-        <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}}{%else%}Ei arvosteluja{%endif%}</p>
-        <hr>
+        <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}} / 5.00{%else%}Ei arvosteluja{%endif%}</p>
     {% endfor %}
 {%else%}
     <p>Ravintoloita ei vielä ole. Ylläpitäjät voivat lisätä niitä.</p>
 {%endif%}
+<footer>
+  <hr>
+  <a href="https://www.flaticon.com/free-icons/maps-and-location" title="maps and location icons">Maps and location icons created by nawicon - Flaticon</a>
+</footer>
 {% endblock %}

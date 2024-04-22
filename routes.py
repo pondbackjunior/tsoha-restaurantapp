@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 import users, restaurants, categories
 from db import db
 from sqlalchemy.sql import text
@@ -121,10 +121,11 @@ def restaurant(restaurant_name):
         type_list = categories.get_types_for_restaurant(restaurant.id)
         comment_list = restaurants.get_comment_list(restaurant.name)
         today = restaurants.get_today_weekday()
+        api_key = getenv("API_KEY")
         if restaurant.name:
             return render_template("restaurant.html", restaurant=restaurant, res_rat=res_rat,
                                    count=len(comment_list), comments=comment_list, categories=category_list,
-                                   types=type_list, today=today)
+                                   types=type_list, today=today, api_key=api_key)
         else:
             return "Ravintolaa ei löytynyt", 404
     if request.method == "POST":
@@ -262,3 +263,8 @@ def delete_categories(restaurant_name):
             return redirect(f"/restaurant/{restaurant.name.replace(' ', '_')}")
         else:
             return render_template("error.html", message="Muokkaaminen ei onnistunut")
+
+@app.route('/api/restaurants')
+def jsonify_restaurants():
+    restaurant_list = restaurants.get_dict_list()
+    return jsonify(restaurant_list)

@@ -9,33 +9,36 @@ async function fetchRestaurants() {
     return restaurants;
 }
 
-async function initMap() {
-    const position = { lat: 60.1690699, lng: 24.9305591 };
+async function initMap(restaurantId) {
+    const restaurants = await fetchRestaurants();
+  
+    const restaurant = restaurants.find(restaurant => restaurant.id === parseInt(restaurantId, 10));
+
+    const defaultPosition = { lat: restaurant.coord_x, lng: restaurant.coord_y };
   
     // Load the Google Maps API libraries
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-    const restaurants = await fetchRestaurants();
   
     // Initialize the map
-    map = new Map(document.getElementById("map"), {
-      zoom: 14,
-      center: position,
-      mapId: "70fdc3138886da7e",
-      clickableIcons: false
+    map = new Map(document.getElementById("map-restaurantpage"), {
+        zoom: 16,
+        center: defaultPosition,
+        mapId: "70fdc3138886da7e",
+        clickableIcons: false
     });
-  
-    restaurants.forEach(restaurant => {
+
+    if (restaurant) {
         const { coord_x, coord_y, name, address } = restaurant;
         // Define the position object for the marker
         const position = { lat: coord_x, lng: coord_y };
 
         const iconImg = document.createElement("img");
-        iconImg.src = "https://cdn-icons-png.flaticon.com/512/5193/5193679.png"
+        iconImg.src = "https://cdn-icons-png.flaticon.com/512/5193/5193679.png";
         iconImg.width = 48;
         iconImg.height = 48;
 
-        // Create a marker for the restaurant
+        // Create a marker for the specific restaurant
         const marker = new AdvancedMarkerElement({
             position: position,
             map: map,
@@ -45,7 +48,7 @@ async function initMap() {
 
         // Create an InfoWindow for the marker
         const infowindow = new google.maps.InfoWindow({
-            content: "<big><a href='/restaurant/" + name.replace(/ /g, '_').replace(/'/g, '%27') + "'>" + name.replace(/'/g, "&#39;") + "</a></big><p><i>" + address + "</i></p>"
+            content: name
         });
 
         // Add a click event listener to the marker
@@ -54,13 +57,15 @@ async function initMap() {
         });
 
         // Add a click event listener to the map
-        map.addListener("click", function(event) {
+        map.addListener("click", function() {
             // Close InfoWindows if any are open
-            if (infowindow) {
-                infowindow.close();
-            }
-            });
-    });
+            infowindow.close();
+        });
+    } else {
+        console.log(`Restaurant with ID ${restaurantId} not found.`);
+    }
 }
 
-initMap();
+const mapElement = document.getElementById("map-restaurantpage");
+const restaurantId = mapElement.getAttribute("data-restaurant-id");
+initMap(restaurantId);
