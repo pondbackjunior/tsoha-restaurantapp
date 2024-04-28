@@ -1,6 +1,5 @@
 let map;
-let marker;
-let infowindow;
+let currentInfoWindow = null;
 
 // Function to fetch restaurant data from the API
 async function fetchRestaurants() {
@@ -45,12 +44,19 @@ async function initMap() {
 
         // Create an InfoWindow for the marker
         const infowindow = new google.maps.InfoWindow({
-            content: "<big><a href='/restaurant/" + name.replace(/ /g, '_').replace(/'/g, '%27') + "'>" + name.replace(/'/g, "&#39;") + "</a></big><p><i>" + address + "</i></p>"
+            content: "<big><a href='/restaurant/" + name.replace(/ /g, '_').replace(/'/g, '%27') + "'>" + name.replace(/'/g, "&#39;") + "</a></big><p>" + address + "</p>"
         });
 
         // Add a click event listener to the marker
         marker.addListener('click', function() {
+            // Close the currently open InfoWindow (if any)
+            if (currentInfoWindow) {
+                currentInfoWindow.close();
+            }
+            // Open the InfoWindow for the current marker
             infowindow.open(map, marker);
+            // Update the currentInfoWindow variable
+            currentInfoWindow = infowindow;
         });
 
         // Add a click event listener to the map
@@ -59,7 +65,7 @@ async function initMap() {
             if (infowindow) {
                 infowindow.close();
             }
-            });
+        });
     });
 }
 

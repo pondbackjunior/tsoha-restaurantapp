@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}Uusi ravintola{% endblock %}
 {% block content %}
+<div class="content-box">
 <form action="/create_restaurant" method="post">
     <h3>Ravintolan nimi</h3>
-    <textarea name="name" rows="1" cols="20" maxlength="100" required></textarea>
+    <textarea name="name" rows="1" cols="50" maxlength="100" required></textarea>
     <h3>Kuvaus</h3>
-    <textarea name="description" rows="3" cols="40" maxlength="5000" required></textarea>
+    <textarea name="description" rows="5" cols="100" maxlength="5000" required></textarea>
     <br>
     <h3>Osoite</h3>
     <textarea name="address" rows="1" cols="50" maxlength="300" required></textarea>
@@ -58,6 +59,8 @@
     
     Sulkeutuu (su): <input type="time" name="close_sun" min="00:00" max="23:59" step="60">
     <br>
+    <br>
     <input type="submit" value="Luo">
     </form>
+</div>
 {%endblock%}

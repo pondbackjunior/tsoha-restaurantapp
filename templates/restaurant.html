@@ -2,86 +2,98 @@
 {% block title %}{{restaurant.name}}{% endblock %}
 {% block content %}
 {% set url_name = restaurant.name|replace(' ', '_') %}
-<h2>{{restaurant.name}}</h2>
-<div class="container">
-<div class="left-content">
-    <dl><dd><i>{{restaurant.description}}</i></dd></dl>
-    <h3>Aukioloajat</h3>
-    <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
-    <ul>
-        <li>Maanantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_mon%}{{ restaurant.open_mon.strftime('%H:%M')}} - {{ restaurant.close_mon.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Tiistai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_tue%}{{ restaurant.open_tue.strftime('%H:%M')}} - {{ restaurant.close_tue.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Keskiviikko: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_wed%}{{ restaurant.open_wed.strftime('%H:%M')}} - {{ restaurant.close_wed.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Torstai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_thu%}{{ restaurant.open_thu.strftime('%H:%M')}} - {{ restaurant.close_thu.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Perjantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_fri%}{{ restaurant.open_fri.strftime('%H:%M')}} - {{ restaurant.close_fri.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Lauantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sat%}{{ restaurant.open_sat.strftime('%H:%M')}} - {{ restaurant.close_sat.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-        <li>Sunnuntai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sun%}{{ restaurant.open_sun.strftime('%H:%M')}} - {{ restaurant.close_sun.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
-    </ul>
-    <h3>Tiedot</h3>
-    <p>Osoite: {{restaurant.address}}</p>
-    <p>Arvosana (keskiarvo): {%if res_rat == "0.00"%}Ei arvosteluja.{%else%}{{res_rat}} / 5.00{%endif%}</p>
-    {% if categories %}
-        <p>Ruokalajit: 
-            {% for category in categories %}
-                {{ category.name }}{% if not loop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-    {% endif %}
-    {% if types %}
-        <p>Ravintolatyypit: 
-            {% for type in types %}
-                {{ type.name }}{% if not loop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-    {% endif %}
-</div>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script type="module" src="{{ url_for('static', filename='assets/js/restaurant.js') }}"></script>
-        <!--The div element for the map -->
-        <div id="map-restaurantpage" data-restaurant-id="{{restaurant.id}}"></div>
-    
-        <!-- prettier-ignore -->
-        <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-            ({key: "{{api_key}}", v: "weekly"});</script>
-</div>
-{% if session.user_id and session.user_role == "admin"%}
-<hr>
-<p>Ylläpitäjän toiminnot: <a href="/delete_restaurant/{{url_name}}">Poista ravintola</a> | <a href="/edit_restaurant/{{url_name}}">Muokkaa ravintolaa</a><!--
---> | <a href="/add_categories/{{url_name}}">Lisää ravintolalle kategorioita</a> | <a href="/delete_categories/{{url_name}}">Poista ravintolalta kategorioita</a> </p>
-{%endif%}
-<hr>
-{% if session.user_id %}
-<h2>Lisää arvostelu</h2>
-<form action="/restaurant/{{restaurant.name}}" method="post">
-    Viesti: <br>
-    <textarea name="comment" rows="3" cols="40" maxlength="2000" required></textarea>
-    <br>
-    Montako tähteä:
-    <p>
-        <input type="radio" name="rating" value="1" required> 1
-        <input type="radio" name="rating" value="2" required> 2
-        <input type="radio" name="rating" value="3" required> 3
-        <input type="radio" name="rating" value="4" required> 4
-        <input type="radio" name="rating" value="5" required> 5
-    </p>
-    <input type="submit" value="Lähetä">
-    </form>
-{%endif%}
-
-<h2>Arvostelut</h2>
-{%if comments%}
-    {{count}} {%if count == 1 %}arvostelu{%else%}arvostelua{%endif%}:
-    <br>
+<center><h1 class="mid-title">{{restaurant.name}}</h1></center>
+    <div class="content-box">
+    <div class="container">
+    <div class="left-content">
+        <dl><dd><i>{{restaurant.description}}</i></dd></dl>
+        <h3>Aukioloajat</h3>
+        <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
+        <ul>
+            <li>Maanantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_mon%}{{ restaurant.open_mon.strftime('%H:%M')}} - {{ restaurant.close_mon.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Tiistai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_tue%}{{ restaurant.open_tue.strftime('%H:%M')}} - {{ restaurant.close_tue.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Keskiviikko: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_wed%}{{ restaurant.open_wed.strftime('%H:%M')}} - {{ restaurant.close_wed.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Torstai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_thu%}{{ restaurant.open_thu.strftime('%H:%M')}} - {{ restaurant.close_thu.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Perjantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_fri%}{{ restaurant.open_fri.strftime('%H:%M')}} - {{ restaurant.close_fri.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Lauantai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sat%}{{ restaurant.open_sat.strftime('%H:%M')}} - {{ restaurant.close_sat.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+            <li>Sunnuntai: {%if restaurant.is_24h%}24h{%else%}{%if restaurant.open_sun%}{{ restaurant.open_sun.strftime('%H:%M')}} - {{ restaurant.close_sun.strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</li>
+        </ul>
+        <h3>Tietoja</h3>
+        <p><b>Osoite:</b> {{restaurant.address}}</p>
+        <p><b>Arvosana (keskiarvo):</b> {%if res_rat == "0.00"%}Ei arvosteluja.{%else%}{{res_rat}} / 5.00{%endif%}</p>
+        {% if categories %}
+            <p><b>Ruokalajit:</b> 
+                {% for category in categories %}
+                    {{ category.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+        {% if types %}
+            <p><b>Ravintolatyypit:</b>
+                {% for type in types %}
+                    {{ type.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <script type="module" src="{{ url_for('static', filename='assets/js/restaurant.js') }}"></script>
+            <!--The div element for the map -->
+            <div id="map-restaurantpage" data-restaurant-id="{{restaurant.id}}"></div>
+        
+            <!-- prettier-ignore -->
+            <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+                ({key: "{{api_key}}", v: "weekly"});</script>
+    </div>
+    {% if session.user_id and session.user_role == "admin"%}
     <hr>
-    {% for comment in comments %}
-        <p><i>Arvosana:</i> {{comment.rating}}</p>
-        <p><i>Arvostelu:</i> {{ comment.comment }}</p>
-        <p><i>Lähettäjä:</i> {{ comment.username }}</p>
-        <p><i>Aika:</i> {{ comment.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-        {% if session.user_id and session.user_role == "admin"%}<a href="/restaurant/{{url_name}}/delete_comment/{{comment.id}}">Poista arvostelu</a>{%endif%}
+    <p>Ylläpitäjän toiminnot: <a href="/delete_restaurant/{{url_name}}">Poista ravintola</a> | <a href="/edit_restaurant/{{url_name}}">Muokkaa ravintolaa</a><!--
+    --> | <a href="/add_categories/{{url_name}}">Lisää ravintolalle kategorioita</a> | <a href="/delete_categories/{{url_name}}">Poista ravintolalta kategorioita</a> </p>
+    {%endif%}
+</div>
+<center><h1 class="mid-title">Arvostelut</h1></center>
+<div class="content-box">
+    {% if session.user_id %}
+    <h2>Lisää arvostelu</h2>
+    <form action="/restaurant/{{restaurant.name}}" method="post">
+        Valitse arvosana (pakollinen):
+        <br>
+        <div class="rating">
+            <input type="radio" id="star5" name="rating" value="5" required />
+            <label class="star" for="star5" title="Täydellinen" aria-hidden="true"></label>
+            <input type="radio" id="star4" name="rating" value="4" required />
+            <label class="star" for="star4" title="Mahtava" aria-hidden="true"></label>
+            <input type="radio" id="star3" name="rating" value="3" required />
+            <label class="star" for="star3" title="Hyvä" aria-hidden="true"></label>
+            <input type="radio" id="star2" name="rating" value="2" required />
+            <label class="star" for="star2" title="Tyydyttävä" aria-hidden="true"></label>
+            <input type="radio" id="star1" name="rating" value="1" required />
+            <label class="star" for="star1" title="Huono" aria-hidden="true"></label>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        Kirjoita arvostelu (vapaaehtoinen):
+        <br>
+        <textarea name="comment" rows="10" cols="75" maxlength="2000"></textarea>
+        <br>
+        <input type="submit" value="Lähetä">
+    </form>
+    {%endif%}
+    <br>
+    {%if comments%}
+        {{count}} {%if count == 1 %}arvostelu{%else%}arvostelua{%endif%}:
+        <br>
         <hr>
-    {% endfor %}
-{%else%}
-    <p>Arvosteluja ei vielä ole. {% if session.user_id %}Luo ensimmäinen arvostelu yläpuolelta!{%else%}Kirjaudu sisään luodaksesi arvostelun!{%endif%}</p>
-{%endif%}
+        {% for comment in comments %}
+            <p><b>{{ comment.username }}</b> | {{ comment.sent_at.strftime("%Y-%m-%d %H:%M:%S") }} | {% for i in range(comment.rating) %}★{% endfor %}</p>
+            <p><i>{{ comment.comment }}</i></p>
+            {% if session.user_id and session.user_role == "admin"%}<a href="/restaurant/{{url_name}}/delete_comment/{{comment.id}}">Poista arvostelu</a>{%endif%}
+            <hr>
+        {% endfor %}
+    {%else%}
+        <p>Arvosteluja ei vielä ole. {% if session.user_id %}Luo ensimmäinen arvostelu yläpuolelta!{%else%}Kirjaudu sisään luodaksesi arvostelun!{%endif%}</p>
+    {%endif%}
+</div>
 {%endblock%}

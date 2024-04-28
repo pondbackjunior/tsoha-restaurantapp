@@ -1,13 +1,17 @@
 {% extends "layout.html" %}
 {% block title %}Rekisteröidy{% endblock %}
 {% block content %}
+<div class="content-box">
 <form action="/register" method="post">
-    Tunnus: <input type="text" name="username" minlength="3" maxlength="30" required>
+    Tunnus (3-20 merkkiä): <input type="text" name="username" minlength="3" maxlength="20" required>
     <p>
-    Salasana (väh. 6 merkkiä): <input type="password" name="password1" minlength="6" maxlength="50" required>
+    Salasana (väh. 6 merkkiä): <input type="password" name="password1" minlength="6" maxlength="30" required>
     <p>
-    Salasana uudestaan: <input type="password" name="password2" minlength="6" maxlength="50" required>
+    Salasana uudestaan: <input type="password" name="password2" minlength="6" maxlength="30" required>
     <p>
     <input type="submit" value="Luo tunnus">
     </form>
+    {%if password_error%}<p style="color:red">Virhe: Salasanat eivät täsmää.</p>{%endif%}
+    {%if general_error%}<p style="color:red">Virhe: Kirjautuminen ei onnistunut. Käyttäjänimi saattaa olla jo käytössä.</p>{%endif%}
+</div>
 {%endblock%}

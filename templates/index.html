@@ -1,52 +1,47 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-{% if session.user_id and session.user_role == "admin"%}
-Ylläpitäjän toiminnot:
-<p><a href="/create_restaurant">Luo ravintola</a> | <a href="/create_category">Luo kategoria</a> | <a href="/remove_categories">Poista kategorioita</a></p>
-<hr>
-{% endif %}
-<p>Tervetuloa ravintolasovellukseen.</p>
-<form action="/result" method="GET">
-  Hae ravintolaa: <input type="text" name="query" maxlength="5000">
-  <input type="submit" value="Hae">
-  </form>
-<hr>
-<h1>Ravintolat</h1>
-<h2>Kartalla</h2>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script type="module" src="{{ url_for('static', filename='assets/js/map.js') }}"></script>
-    <!--The div element for the map -->
-    <center><div id="map"></div></center>
+<!--None-displaying image to include referrerpolicy-->
+<img src="https://i.imgur.com/kR7RiQs.jpeg" referrerpolicy="no-referrer" style="display:none;">
+<center><h1 class="mid-title" style="margin-right:64px;"><img src="https://cdn-icons-png.flaticon.com/512/5193/5193679.png" height="64px" width="64px">Tervetuloa ravintolasovellukseen!</h1></center>
+<div class="content-box">
+    <center><h3>Näytetään {{count}} ravintolaa kartalla:</h3></center>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script type="module" src="{{ url_for('static', filename='assets/js/map.js') }}"></script>
+        <!--The div element for the map -->
+        <center><div id="map"></div></center>
 
-    <!-- prettier-ignore -->
-    <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "{{api_key}}", v: "weekly"});</script>
-<h2>Listana</h2>
-<p>Järjestä:</p>
-<form action="/" method="post">
-    <select name="order_by">
-      <option value="newest" {% if order_by == 'newest' %}selected{% endif %}>Uusin</option>
-      <option value="rating" {% if order_by == 'rating' %}selected{% endif %}>Paras arvosana</option>
-    </select>
-    <input type="submit" value="Järjestä">
-  </form>
-  
-{%if restaurants%}
-    {% for restaurant in restaurants %}
-        {% set url_name = restaurant.name|replace(' ', '_') %}
-        <hr>
-        <h2><a href="/restaurant/{{url_name}}">{{ restaurant.name }}</a></h2>
-        <p><i>{{ restaurant.description }}</i></p>
-        <p><b>{{restaurant.address}}</b></p>
-        <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
-        <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}} / 5.00{%else%}Ei arvosteluja{%endif%}</p>
-    {% endfor %}
-{%else%}
-    <p>Ravintoloita ei vielä ole. Ylläpitäjät voivat lisätä niitä.</p>
-{%endif%}
-<footer>
-  <hr>
-  <a href="https://www.flaticon.com/free-icons/maps-and-location" title="maps and location icons">Maps and location icons created by nawicon - Flaticon</a>
-</footer>
+        <!-- prettier-ignore -->
+        <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+            ({key: "{{api_key}}", v: "weekly"});</script>
+</div>
+<center><h1 class="mid-title">Ravintolat</h1></center>
+<div class="content-box">
+    <p>Järjestä:</p>
+    <form action="/" method="post">
+        <select name="order_by">
+        <option value="newest" {% if order_by == 'newest' %}selected{% endif %}>Uusin</option>
+        <option value="rating" {% if order_by == 'rating' %}selected{% endif %}>Paras arvosana</option>
+        </select>
+        <input type="submit" value="Järjestä">
+    </form>
+    <p>Näytetään 10 {% if order_by == 'newest' %}uusinta{%else%}parhaiten arvosteltua{% endif %} ravintolaa:</p>
+    {%if restaurants%}
+        {% for restaurant in restaurants %}
+            {% set url_name = restaurant.name|replace(' ', '_') %}
+            <hr>
+            <center>
+            <h2 class="restaurant-font"><a href="/restaurant/{{url_name}}" style="text-decoration: none;">{{ restaurant.name }}</a></h2>
+            <p><i>{{ restaurant.description }}</i></p>
+            <p><b>{{restaurant.address}}</b></p>
+            <p>Avoinna tänään: {%if restaurant.is_24h%}Auki 24h{%else%}{%if restaurant['open_' + today]%}{{ restaurant['open_' + today].strftime('%H:%M')}} - {{ restaurant['close_' + today].strftime('%H:%M')}}{%else%}Suljettu.{%endif%}{%endif%}</p>
+            <p>Arvosana (keskiarvo): {%if restaurant.rating%}{{restaurant.rating|round(2)}} / 5.00 ({{restaurant.ratings_count}} arvostelua){%else%}Ei arvosteluja{%endif%}</p>
+            </center>
+        {% endfor %}
+    <hr>
+    <a href="/result?query=">Näytä kaikki ravintolat</a>
+    {%else%}
+        <p>Ravintoloita ei vielä ole. Ylläpitäjät voivat lisätä niitä.</p>
+    {%endif%}
+</div>
 {% endblock %}

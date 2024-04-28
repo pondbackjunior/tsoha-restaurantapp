@@ -9,16 +9,14 @@ from os import getenv
 def index():
     if request.method == "GET":
         api_key = getenv("API_KEY")
-        users.generate_default_admin()
         today = restaurants.get_today_weekday()
         try:
             order_by = request.args.get("order_by", "newest")
             restaurant_list = restaurants.get_list(order_by)
         except Exception as e:
-            print(e) 
             order_by = "newest"
             restaurant_list = restaurants.get_list(order_by)
-        return render_template("index.html", order_by=order_by, count=len(restaurant_list), restaurants=restaurant_list, today=today, api_key=api_key)
+        return render_template("index.html", order_by=order_by, count=len(restaurants.get_list(order_by, limit=9999)), restaurants=restaurant_list, today=today, api_key=api_key)
     if request.method == "POST":
         order_by = request.form["order_by"]
         return redirect(f"/?order_by={order_by}")
@@ -26,14 +24,14 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", error=False)
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
             return redirect("/")
         else:
-            return render_template("error.html", message="Väärä tunnus tai salasana")
+            return render_template("login.html", error=True)
 
 @app.route("/logout")
 def logout():
@@ -43,17 +41,17 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html")
+        return render_template("register.html", error=False)
     if request.method == "POST":
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("error.html", message="Salasanat eroavat")
+            return render_template("register.html", password_error=True)
         if users.register(username, password1):
             return redirect("/")
         else:
-            return render_template("error.html", message="Rekisteröinti ei onnistunut")
+            return render_template("register.html", general_error=True)
         
 @app.route("/result")
 def result():

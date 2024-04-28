@@ -41,8 +41,3 @@ def user_id():
 
 def user_role():
     return session.get("user_role",0)
-
-def generate_default_admin():
-    if not db.session.execute(text("SELECT id FROM users WHERE username='admin'")).fetchone():
-        db.session.execute(text("INSERT INTO users (username,password,role) VALUES ('admin', 'admin', 'admin')"))
-        db.session.commit()

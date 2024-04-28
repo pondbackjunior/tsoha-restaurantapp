@@ -1,48 +1,240 @@
-/* Add CSS styles for the header */
-.header {
+html{
+    color: #2e2e2e;
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+    font-weight: 300;
+    line-height: 1.65em;
+}
+
+body{
+    background-image: url('https://i.imgur.com/kR7RiQs.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-position-y: 1px;
+}
+
+html, body{
+    margin: 0;
+    padding:0;
+}
+
+b{
+    font-weight: bold;
+}
+
+a, a:visited{
+    color: purple;
+}
+
+hr{
+    border:none;
+    border-bottom: 1px solid;
+  }
+
+textarea{
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+    resize:none;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 1px 1px 3px;
+}
+
+footer{
+    border-top: 3px solid black;
+    background:rgba(55, 61, 73, 0.975);
+    padding: 5px;
+    margin-top:auto;
+  }
+  
+  footer a, footer a:visited{
+    color: white;
+  }
+
+.restaurant-font {
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+.mid-title{
+    color:white;
+    text-shadow: 2px 2px 4px black;
+    font-weight: 300;
+}
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content{
+    width: 75rem;
+    margin: auto;
+    padding: 2em 2em 1em 2em;
+    flex: 1;
+    min-height: 100vh;    
+    display: flex;
+    flex-direction: column;
+}
+
+.content-box{
+    padding: 2em 2em 1em 2em;
+    background-image: linear-gradient(#f2ecda, #c7c7c7);
+    border: 3px solid;
+    margin-top: 5em;
+    margin-bottom: 5em;
+    border-radius: 10px;
+    box-shadow: 10px 5px 5px;
+  }
+
+.header{
+    height:64px;
+    background:rgba(55, 61, 73, 0.975);
+    color:white;
+}
+
+.header a, .header a:visited{
+    color:white;
+  }
+
+.header, .navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
+    padding: 0 10px 0 10px;
 }
 
-/* Style for each section in the header */
+.navigation{
+    color:white;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background:rgba(55, 61, 73, 0.975);
+    border-bottom: 3px solid black;
+}
+
+.navigation a, .navigation a:visited{
+    color:white;
+}
+
+
 .header .center {
-    flex-grow: 1; /* Allows the center section to take up available space */
-    text-align: center; /* Centers the text */
+    flex-grow: 1;
+    text-align: center; 
 }
 
-/* Right section styling */
+
 .right {
-    display: flex; /* Allows child elements to be aligned */
-    flex-direction: column; /* Arrange child elements in a column */
-    align-items: flex-end; /* Align items to the right */
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; 
 }
 
-/* Style for user greeting and logout link */
+
 .right .logout-link {
-    margin-top: 4px; /* Add some space above the link */
-}
-
-html{
-    font-family: "Arial";
-}
-
-#map {
-    height: 600px; /* The height is 400 pixels */
-    width: 100%; /* The width is the width of the web page */
-    border: 2px solid;
-}
-
-#map-restaurantpage {
-    height: 250px; /* The height is 400 pixels */
-    width: 400px; /* The width is the width of the web page */
-    border: 2px solid;
+    margin-top: 4px; 
 }
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equal columns */
-    gap: 20px; /* Add space between columns */
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#map {
+    height: 600px;
+    width: 100%;
+    border: 2px solid;
+    border-radius: 10px;
+}
+
+#map-restaurantpage {
+    height: 250px;
+    width: 400px;
+    border: 2px solid;
+    border-radius:10px;
 }
   
+
+.rating {
+    margin-top: 40px;
+    border: none;
+    float: left;
+    clear:both;
+  }
+  
+  .rating > label {
+    color: #90A0A3;
+    float: right;
+  }
+  
+  .rating > label:before {
+    margin: 5px;
+    font-size: 2em;
+    font-family: FontAwesome;
+    content: "\f005";
+    display: inline-block;
+  }
+  
+  .rating > input {
+    display: none;
+  }
+  
+  .rating > input:checked ~ label,
+  .rating:not(:checked) > label:hover,
+  .rating:not(:checked) > label:hover ~ label {
+    color: #F79426;
+  }
+  
+  .rating > input:checked + label:hover,
+  .rating > input:checked ~ label:hover,
+  .rating > label:hover ~ input:checked ~ label,
+  .rating > input:checked ~ label:hover ~ label {
+    color: #c29500;
+  }
+
+  input[type=submit]{
+    border: 2px solid;
+    background: linear-gradient(#8ebef5, #c9d9ff);
+    border-radius: 10px;
+    font-size: 1em;
+    padding: 5px;
+  }
+  
+  input[type=submit]:hover{
+    background: #c4d5ff;
+    cursor: pointer;
+  }
+  
+  input[type=button]:hover{
+    background: #f4ffc4;
+    cursor: pointer;
+  }
+  
+  input[type=button]{
+    background: linear-gradient(#d5e882, #f5ffc9);
+    border: 2px solid;
+    border-radius: 10px;
+    font-size: 1em;
+    padding: 5px;
+  }
+  
+  .navigation input[type=submit]{
+    border: none;
+    background: white;
+    border-radius: 0;
+    font-size: 14px;
+    padding: 2px 4px 2px 4px;
+  }
+
+  input[value='Järjestä']{
+    border: 1px solid;
+    background: white;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 2px 4px 2px 4px;
+  }

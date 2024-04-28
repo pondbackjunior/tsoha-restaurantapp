@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Haku{% endblock %}
 {% block content %}
+<div class="content-box">
 {%if restaurants%}
     {% set result_count = restaurants | length %}
     {% if result_count == 1 %}
@@ -9,12 +10,16 @@
         <p>Löytyi {{ result_count }} ravintolaa:</p>
     {% endif %}
     {% for restaurant in restaurants %}
-        {% set url_name = restaurant.name|replace(' ', '_') %}
-        <h2><a href="/restaurant/{{url_name}}">{{ restaurant.name }}</a></h2>
-        <p><i>{{ restaurant.description }}</i></p>
+    {% set url_name = restaurant.name|replace(' ', '_') %}
         <hr>
+        <center>
+            <h2 class="restaurant-font"><a href="/restaurant/{{url_name}}" style="text-decoration: none;">{{ restaurant.name }}</a></h2>
+            <p><i>{{ restaurant.description }}</i></p>
+            <p><b>{{restaurant.address}}</b></p>
+        </center>
     {% endfor %}
 {%else%}
     <p>Ei tuloksia.</p>
 {%endif%}
+</div>
 {%endblock%}

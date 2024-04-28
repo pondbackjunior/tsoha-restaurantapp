@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Kirjaudu sisään{% endblock %}
 {% block content %}
+<div class="content-box">
 <form action="/login" method="post">
     Tunnus: <input type="text" name="username" maxlength="50" required>
     <p>
@@ -8,5 +9,7 @@
     <p>
     <input type="submit" value="Kirjaudu">
     </form>
-    Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
+    {%if error%}<p style="color:red">Virhe: Väärä tunnus tai salasana.</p>{%endif%}
+    <p>Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a></p>
+</div>
 {%endblock%}

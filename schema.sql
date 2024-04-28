@@ -60,6 +60,8 @@ CREATE TABLE restaurants_types(
     type_id INTEGER REFERENCES types
 );
 
+INSERT INTO users (name, password, role) VALUES ('admin', 'admin', 'admin');
+
 INSERT INTO categories (name) VALUES ('Hampurilaiset'), ('Salaatti'), ('Jälkiruoka'), ('Kasvisruoka'), ('Amerikkalainen'), ('Pizza'), ('Vegaani'), ('Jäätelö'),
 ('Katuruoka'), ('Voileivät'), ('Kebab'), ('Japanilainen'), ('Nuudelit'), ('Aamupala'), ('Terveellinen'), ('Keitto'), ('Sushi'), ('Välimerellinen'), ('Italialainen'),
 ('Meksikolainen'), ('Kulhoruuat'), ('Nepalilainen'), ('Wings');

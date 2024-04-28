@@ -4,14 +4,19 @@
     <title>Ravintolasovellus - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href={{ url_for('static', filename='assets/css/main.css') }}>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
   </head>
+  <!--Background image from https://commons.wikimedia.org/wiki/File:Helsinki_Lutheran_Cathedral_(panoraaman%C3%A4k%C3%B6ala)-2_(s%C3%A4%C3%A4t%C3%B6).jpg - CC BY-SA 4.0 Deed - Edited-->
   <body>
     <div class="header">
         <div class="left">
             <a href="/">Etusivu</a>
         </div>
         <div class="center">
-            <b>Ravintolasovellus</b>
+            <h3>Ravintolasovellus</h3>
         </div>
         <div class="right">
             {% if session.user_id %}
@@ -22,9 +27,26 @@
             {% endif %}
         </div>
     </div>
-    <hr>
-    <div class="content">
-      {% block content %}{% endblock %}
+    <div class="navigation">
+      <div class="left">
+        {% if session.user_id and session.user_role == "admin"%}
+        <p><a href="/create_restaurant">Luo ravintola</a> | <a href="/create_category">Luo kategoria</a> | <a href="/remove_categories">Poista kategorioita</a></p>
+        {% endif %}
+      </div>
+      <div class="right">
+        <form action="/result" method="GET">
+          Hae ravintolaa: <input type="text" name="query" maxlength="5000">
+          <input type="submit" value="Hae">
+          </form>
+        </div>
     </div>
-  </body>
+    <div class="main-wrapper">
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+    <footer>
+      <a href="https://www.flaticon.com/free-icons/maps-and-location" title="maps and location icons">Maps and location icons created by nawicon - Flaticon</a>
+    </footer>
+  </div>
+</body>
 </html>

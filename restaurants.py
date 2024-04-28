@@ -3,14 +3,14 @@ import users
 from sqlalchemy.sql import text
 import datetime
 
-def get_list(order_by):
-    sql = text(f"""SELECT COALESCE(AVG(RR.rating),0) AS rating, R.id as newest,
+def get_list(order_by, limit=10):
+    sql = text(f"""SELECT COALESCE(AVG(RR.rating),0) AS rating, R.id as newest, COUNT(RR.id) as ratings_count,
                R.name, R.description, R.address, R.coord_x, R.coord_y, R.is_24h,
                R.open_mon, R.close_mon, R.open_tue, R.close_tue, R.open_wed, R.close_wed, R.open_thu, R.close_thu,
                R.open_fri, R.close_fri, R.open_sat, R.close_sat, R.open_sun, R.close_sun
                FROM restaurants R
                LEFT JOIN restaurants_ratings RR ON R.id=RR.restaurant_id GROUP BY R.id
-               ORDER BY {order_by} DESC""")
+               ORDER BY {order_by} DESC LIMIT {limit}""")
     result = db.session.execute(sql)
     return result.fetchall()
 
