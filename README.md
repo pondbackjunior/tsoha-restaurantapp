@@ -6,26 +6,20 @@ Sovelluksessa on muutama esimerkkiravintola luotuna valmiiksi.
 
 Toimintoja voi testata tekemällä uuden tilin tai testaamalla ylläpitäjätoimintoja käyttämällä käyttäjänimeä `admin` salasanalla `admin`, jotka on kovakoodattu.
 
-Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly.dev/. (Jos sivusto näyttää ekalla avauksella erroria, päivitä sivu ja pitäisi toimia).
+Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly.dev/.
+* Sivusto saattaa näyttää ensimmäisellä avauksella erroria. Päivittämällä sivun se toimii normaalisti.
+  * Tämä virhe johtuu lokien mukaan sqlalchemyn ja fly.io:n serverin yhteyden välisestä häikästä, eli tämä ei ole korjattavissa sovelluksen koodissa.
 
-## Välipalautus 2 (7.4.2024)
-Sovellukseen on lisätty seuraavat toiminnot:
+# Toiminnot
 * Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
+* Etusivulla on kartta. Painamalla ravintoloita näkee niiden nimen ja osoitteen. Painamalla nimeä pääsee ravintolan sivulle.
+* Etusivulla on myös listana (max 10kpl) ravintoloita. Käyttäjä voi vaihtaa listän järjestystä uusimman tai parhaiden arvostellun mukaan.
 * Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita.
 * Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä määrittää ravintolasta näytettävät tiedot.
-* Käyttäjä näkee myös listan, jossa ravintolat on järjestetty parhaimmasta huonoimpaan arvioiden mukaisesti.
 * Ylläpitäjä voi tarvittaessa poistaa käyttäjän antaman arvion.
-
-Tällä hetkellä ravintolat näkyy listana, ei kartassa.
-
-## Välipalautus 3 (21.4.2024)
-Sovellukseen on lisätty seuraavat toiminnot:
 * Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa tai nimessä on annettu sana.
 * Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
-* Ravintoloiden tietojen määrää on lisätty.
-* Kartta on lisätty, ja painamalla ravintoloita näkee sen nimen ja osoitteen. Painamalla nimeä pääsee ravintolan sivulle.
 
-Kaikki sovelluksen ominaisuudet ovat käytännössä tehty, eli sovellus tarvii vielä hieman viimestelyä ja ulkoasun parantamista.
 <!--
 # Käynnistysohjeet
 
