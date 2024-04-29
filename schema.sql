@@ -60,13 +60,19 @@ CREATE TABLE restaurants_types(
     type_id INTEGER REFERENCES types
 );
 
-INSERT INTO users (name, password, role) VALUES ('admin', 'admin', 'admin');
+-- Add default admin
+
+INSERT INTO users (username, password, role) VALUES ('admin', 'admin', 'admin');
+
+-- Add default categories and types for initial launch
 
 INSERT INTO categories (name) VALUES ('Hampurilaiset'), ('Salaatti'), ('Jälkiruoka'), ('Kasvisruoka'), ('Amerikkalainen'), ('Pizza'), ('Vegaani'), ('Jäätelö'),
 ('Katuruoka'), ('Voileivät'), ('Kebab'), ('Japanilainen'), ('Nuudelit'), ('Aamupala'), ('Terveellinen'), ('Keitto'), ('Sushi'), ('Välimerellinen'), ('Italialainen'),
 ('Meksikolainen'), ('Kulhoruuat'), ('Nepalilainen'), ('Wings');
 
 INSERT INTO types (name) VALUES ('Hieno ruokailu'), ('Rento ruokailu'), ('Perhetyyli'), ('Buffet'), ('Kahvila'), ('Pikaruoka'), ('Ruoka-auto/koju');
+
+-- Add default restaurants for initial launch
 
 INSERT INTO restaurants (name, description, address, coord_x, coord_y, is_24h)
 VALUES ('McDonald''s Helsinki Kamppi', 'Pitkäikäinen pikaruokaketju, joka tunnetaan hampurilaisista ja ranskalaisista.',

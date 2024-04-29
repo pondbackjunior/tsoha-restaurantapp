@@ -38,6 +38,7 @@ textarea{
     border-radius: 10px;
     padding: 10px;
     box-shadow: 1px 1px 3px;
+    max-width: 100%;
 }
 
 footer{
@@ -45,6 +46,7 @@ footer{
     background:rgba(55, 61, 73, 0.975);
     padding: 5px;
     margin-top:auto;
+    max-width: 100%;
   }
   
   footer a, footer a:visited{
@@ -71,13 +73,20 @@ footer{
 }
 
 .content{
-    width: 75rem;
+    width: 65vw;
     margin: auto;
     padding: 2em 2em 1em 2em;
     flex: 1;
     min-height: 100vh;    
     display: flex;
     flex-direction: column;
+}
+
+@media screen and (max-width: 1000px) {
+    .content{
+        width: 95vw !important;
+        padding: 0 !important;
+    }
 }
 
 .content-box{
@@ -154,7 +163,7 @@ footer{
 
 #map-restaurantpage {
     height: 250px;
-    width: 400px;
+    width: 100%;
     border: 2px solid;
     border-radius:10px;
 }

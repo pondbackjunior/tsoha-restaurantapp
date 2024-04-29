@@ -8,12 +8,12 @@ from os import getenv
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        api_key = getenv("API_KEY")
+        api_key = getenv("API_KEY") # Needs Google Maps API key to function.
         today = restaurants.get_today_weekday()
         try:
             order_by = request.args.get("order_by", "newest")
             restaurant_list = restaurants.get_list(order_by)
-        except Exception as e:
+        except:
             order_by = "newest"
             restaurant_list = restaurants.get_list(order_by)
         return render_template("index.html", order_by=order_by, count=len(restaurants.get_list(order_by, limit=9999)), restaurants=restaurant_list, today=today, api_key=api_key)
@@ -24,7 +24,7 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", error=False)
+        return render_template("login.html", error=None)
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -41,17 +41,21 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html", error=False)
+        return render_template("register.html", error=None)
     if request.method == "POST":
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("register.html", password_error=True)
+            return render_template("register.html", error="Salasanat eivät täsmää.")
+        if len(username) < 3 or len(username) > 20:
+            return render_template("register.html", error="Käyttäjänimi on väärän pituinen.")
+        if len(password1) < 6 or len(password1) > 30:
+            return render_template("register.html", error="Salasana on väärän pituinen.")
         if users.register(username, password1):
             return redirect("/")
         else:
-            return render_template("register.html", general_error=True)
+            return render_template("register.html", error="Käyttäjänimi on varattu.")
         
 @app.route("/result")
 def result():
@@ -129,6 +133,8 @@ def restaurant(restaurant_name):
     if request.method == "POST":
         comment = request.form["comment"]
         rating = request.form["rating"]
+        if not rating:
+            return render_template("error.html", message="Et valinnut arvosanaa.")
         if len(comment) > 5000:
             return render_template("error.html", message="Viesti on liian pitkä")
         if restaurants.comment(comment, rating, restaurant_name):

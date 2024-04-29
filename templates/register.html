@@ -11,7 +11,6 @@
     <p>
     <input type="submit" value="Luo tunnus">
     </form>
-    {%if password_error%}<p style="color:red">Virhe: Salasanat eivät täsmää.</p>{%endif%}
-    {%if general_error%}<p style="color:red">Virhe: Kirjautuminen ei onnistunut. Käyttäjänimi saattaa olla jo käytössä.</p>{%endif%}
+    {%if error%}<p style="color:red">Virhe: {{error}}</p>{%endif%}
 </div>
 {%endblock%}
