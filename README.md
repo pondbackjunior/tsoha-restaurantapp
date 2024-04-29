@@ -13,6 +13,7 @@ Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly
 # Toiminnot
 * Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
 * Etusivulla on kartta. Painamalla ravintoloita näkee niiden nimen ja osoitteen. Painamalla nimeä pääsee ravintolan sivulle.
+  * Kartta käyttää Google Maps API:ta, ja merkit sijoittuvat kartalle JSON:in avulla.
 * Etusivulla on myös listana (max 10kpl) ravintoloita. Käyttäjä voi vaihtaa listän järjestystä uusimman tai parhaiden arvostellun mukaan.
 * Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita.
 * Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä määrittää ravintolasta näytettävät tiedot.
