@@ -9,7 +9,7 @@ async function fetchRestaurants() {
 }
 
 async function initMap() {
-    const position = { lat: 60.1690699, lng: 24.9305591 };
+    const position = { lat: 60.16688572970774, lng: 24.939715103344465 };
   
     // Load the Google Maps API libraries
     const { Map } = await google.maps.importLibrary("maps");
@@ -18,7 +18,7 @@ async function initMap() {
   
     // Initialize the map
     map = new Map(document.getElementById("map"), {
-      zoom: 14,
+      zoom: 13,
       center: position,
       mapId: "70fdc3138886da7e",
       clickableIcons: false
