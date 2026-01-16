@@ -6,7 +6,8 @@ Sovelluksessa on muutama esimerkkiravintola luotuna valmiiksi.
 
 Toimintoja voi testata tekemällä uuden tilin tai testaamalla ylläpitäjätoimintoja käyttämällä käyttäjänimeä `admin` salasanalla `admin`, jotka on kovakoodattu.
 
-Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly.dev/.
+~~Sovellus on testattavissa fly.io:ssa osoitteessa https://tsoha-restaurantapp.fly.dev/.~~
+* Sovellus ei ole tällä hetkellä tuotannossa, eli se pitää avata lokaalisti.
 * Sivusto saattaa näyttää ensimmäisellä avauksella erroria. Päivittämällä sivun se toimii normaalisti.
   * Tämä virhe johtuu lokien mukaan sqlalchemyn ja fly.io:n serverin yhteyden välisestä häikästä, eli tämä ei ole korjattavissa sovelluksen koodissa.
 
